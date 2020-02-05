@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzil <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: abelarif <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 19:33:10 by aamzil            #+#    #+#             */
-/*   Updated: 2019/10/30 14:41:42 by aamzil           ###   ########.fr       */
+/*   Created: 2020/01/24 20:18:43 by abelarif          #+#    #+#             */
+/*   Updated: 2020/01/24 20:18:43 by abelarif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,23 @@
 
 # define GET_NEXT_LINE_H
 
-# include <stdlib.h>
-
-# include <sys/types.h>
-
-# include <sys/uio.h>
-
 # include <unistd.h>
 
-int		get_next_line(int fd, char **line);
-char	*my_realloc(char *dst, char *src, int len);
-int		has_nl(char *s, int new_line);
-char	*my_free(char *buf, char *rest);
-char	*sdp(char *s1, char *right_s);
-char	*helper_fun(char **line, char *rest, char *buf);
+# include <string.h>
+
+# include <stdlib.h>
+
+# include <fcntl.h>
+
+# include <stdio.h>
+
+int     get_next_line(int fd, char **line);
+int     ft_checkvalue(int read_value, char **line, char *rest);
+char    *my_free(char *buf, char *rest);
+size_t  ft_strlen(const char *s);
+int     check_nl(const char *rest);
+char    *strjoin(char *rest, char *buf);
+char    *r_r(char *rest, int index_nl);
+char    *r_l(char *rest, int index_nl);
 
 #endif

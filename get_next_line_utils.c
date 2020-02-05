@@ -3,92 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamzil <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: abelarif <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/24 17:29:44 by aamzil            #+#    #+#             */
-/*   Updated: 2019/10/30 14:43:52 by aamzil           ###   ########.fr       */
+/*   Created: 2020/01/24 20:22:16 by abelarif          #+#    #+#             */
+/*   Updated: 2020/01/24 20:22:16 by abelarif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*my_realloc(char *dst, char *src, int len)
-{
-	int		malloc_len;
-	char	*tmp;
-	int		i;
-	int		j;
-
-	j = -1;
-	i = -1;
-	malloc_len = (has_nl(src, 0) < len) ? has_nl(src, 0) : len;
-	malloc_len += has_nl(dst, 0);
-	if (!(tmp = (char*)malloc(malloc_len + 1)))
-		return (0);
-	while (dst && dst[++i])
-		tmp[i] = dst[i];
-	i = (dst) ? i : 0;
-	while (src && src[++j] && j < len)
-		tmp[i++] = src[j];
-	tmp[i] = '\0';
-	if (dst && len)
-		dst = my_free(dst, NULL);
-	return (tmp);
-}
-
-char	*my_free(char *buf, char *rest)
-{
-	if (buf)
-	{
-		free(buf);
-		buf = NULL;
-	}
-	if (rest)
-	{
-		free(rest);
-		rest = NULL;
-	}
-	return (NULL);
-}
-
-int		has_nl(char *s, int new_line)
+size_t	ft_strlen(const char *s)
 {
 	int i;
 
-	i = -1;
-	if (!s && !new_line)
-		return (0);
-	else if (!s)
-		return (-1);
-	while (s[++i])
-		if (s[i] == '\n' && new_line)
-			return (i);
-	return ((new_line) ? -1 : i);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
 }
 
-char	*sdp(char *s1, char *right_s)
+int	check_nl(const char *rest)
 {
-	int		lensrc;
-	char	*ptr;
+	int i;
+
+	i = 0;
+	while (rest[i])
+	{
+		if (rest[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*strjoin(char *rest, char *buf)
+{
+	int		lenrest;
+	int		lenbuf;
+	char	*p;
+	int		i;
+	int		j;
+
+	if (rest == 0)
+		return (buf);
+	lenbuf = ft_strlen(buf);
+	lenrest = ft_strlen(rest);
+	if (!(p = malloc((lenrest + lenbuf + 1) * sizeof(char))))
+		return (0);
+	i = -1;
+	while (++i < lenrest)
+		p[i] = rest[i];
+	j = 0;
+	while (i < (lenrest + lenbuf))
+		p[i++] = buf[j++];
+	p[i] = '\0';
+	return (p);
+}
+
+char	*r_r(char *rest, int index_nl)
+{
+	char	*r;
 	int		i;
 
-	i = -1;
-	lensrc = has_nl(s1, 0);
-	if (!(ptr = (char*)malloc(lensrc + 1)))
+	i = 0;
+	if (!(r = malloc(sizeof(char) * (ft_strlen(rest) - index_nl))))
 		return (0);
-	while (s1[++i])
-		ptr[i] = s1[i];
-	ptr[i] = '\0';
-	right_s = my_free(right_s, NULL);
-	return (ptr);
+	while ((index_nl + 1) < (int)ft_strlen(rest))
+	{
+		r[i] = rest[index_nl + 1];
+		i++;
+		index_nl++;
+	}
+	r[i] = '\0';
+	return (r);
 }
 
-char	*helper_fun(char **line, char *rest, char *buf)
+char	*r_l(char *rest, int index_nl)
 {
-	if (!((*line) = my_realloc(rest, "", 0)))
-	{
-		my_free(buf, rest);
+	char	*l;
+	int		i;
+
+	i = 0;
+	if (!(l = malloc(sizeof(char) * (index_nl + 1))))
 		return (0);
+	while (i < index_nl)
+	{
+		l[i] = rest[i];
+		i++;
 	}
-	return (*line);
+	l[i] = '\0';
+	return (l);
 }
