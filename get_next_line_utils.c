@@ -6,7 +6,7 @@
 /*   By: abelarif <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 20:22:16 by abelarif          #+#    #+#             */
-/*   Updated: 2020/01/24 20:22:16 by abelarif         ###   ########.fr       */
+/*   Updated: 2020/02/07 19:29:38 by abelarif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	int i;
 
 	i = 0;
+	if (s == NULL)
+		return (0);
 	while (s[i] != '\0')
 	{
 		i++;
@@ -24,12 +26,12 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int	check_nl(const char *rest)
+int		check_nl(const char *rest)
 {
 	int i;
 
 	i = 0;
-	while (rest[i])
+	while (rest && rest[i])
 	{
 		if (rest[i] == '\n')
 			return (i);
@@ -38,7 +40,7 @@ int	check_nl(const char *rest)
 	return (-1);
 }
 
-char	*strjoin(char *rest, char *buf)
+char	*strjoin(char **rest, char *buf)
 {
 	int		lenrest;
 	int		lenbuf;
@@ -49,12 +51,12 @@ char	*strjoin(char *rest, char *buf)
 	if (rest == 0)
 		return (buf);
 	lenbuf = ft_strlen(buf);
-	lenrest = ft_strlen(rest);
+	lenrest = ft_strlen(*rest);
 	if (!(p = malloc((lenrest + lenbuf + 1) * sizeof(char))))
 		return (0);
 	i = -1;
 	while (++i < lenrest)
-		p[i] = rest[i];
+		p[i] = (*rest)[i];
 	j = 0;
 	while (i < (lenrest + lenbuf))
 		p[i++] = buf[j++];
@@ -66,11 +68,13 @@ char	*r_r(char *rest, int index_nl)
 {
 	char	*r;
 	int		i;
+	int		len_rest;
 
+	len_rest = (int)ft_strlen(rest);
 	i = 0;
-	if (!(r = malloc(sizeof(char) * (ft_strlen(rest) - index_nl))))
+	if (!(r = malloc(sizeof(char) * (len_rest - index_nl))))
 		return (0);
-	while ((index_nl + 1) < (int)ft_strlen(rest))
+	while ((index_nl + 1) < len_rest)
 	{
 		r[i] = rest[index_nl + 1];
 		i++;
