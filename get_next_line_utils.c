@@ -6,38 +6,46 @@
 /*   By: abelarif <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 20:22:16 by abelarif          #+#    #+#             */
-/*   Updated: 2020/02/07 19:29:38 by abelarif         ###   ########.fr       */
+/*   Updated: 2020/02/08 18:55:56 by abelarif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-size_t	ft_strlen(const char *s)
-{
-	int i;
-
-	i = 0;
-	if (s == NULL)
-		return (0);
-	while (s[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
 
 int		check_nl(const char *rest)
 {
 	int i;
 
 	i = 0;
-	while (rest && rest[i])
+	if (!rest)
+		return (-1);
+	while (rest[i])
 	{
 		if (rest[i] == '\n')
 			return (i);
 		i++;
 	}
 	return (-1);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*s;
+	int		len;
+	int		i;
+
+	len = 0;
+	while (s1[len])
+		len++;
+	len++;
+	s = malloc(len * sizeof(char));
+	if (s == 0)
+		return (0);
+	i = -1;
+	while (s1[++i])
+		s[i] = s1[i];
+	s[i] = '\0';
+	return (s);
 }
 
 char	*strjoin(char **rest, char *buf)
@@ -48,8 +56,6 @@ char	*strjoin(char **rest, char *buf)
 	int		i;
 	int		j;
 
-	if (rest == 0)
-		return (buf);
 	lenbuf = ft_strlen(buf);
 	lenrest = ft_strlen(*rest);
 	if (!(p = malloc((lenrest + lenbuf + 1) * sizeof(char))))
@@ -61,6 +67,7 @@ char	*strjoin(char **rest, char *buf)
 	while (i < (lenrest + lenbuf))
 		p[i++] = buf[j++];
 	p[i] = '\0';
+	free_all(0, rest);
 	return (p);
 }
 
@@ -81,6 +88,7 @@ char	*r_r(char *rest, int index_nl)
 		index_nl++;
 	}
 	r[i] = '\0';
+	free(rest);
 	return (r);
 }
 
